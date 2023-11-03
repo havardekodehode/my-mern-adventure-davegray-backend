@@ -96,6 +96,7 @@ const updateUser = asyncHandler(async (req, res) => {
 // @access Private
 const deleteUser = asyncHandler(async (req, res) => {
     const { id } = req.body;
+
     if (!id) {
         return res.status(400).json({ message: ' User ID Required' });
     }
@@ -112,7 +113,9 @@ const deleteUser = asyncHandler(async (req, res) => {
 
     const result = await user.deleteOne();
 
-    const reply = `Username ${result.username} with ID ${result._id}`;
+    const reply = `Username ${user.username} with ID ${user._id} deleted`;
+
+    res.json(reply);
 });
 
 module.exports = {

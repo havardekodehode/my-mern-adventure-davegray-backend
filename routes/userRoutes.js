@@ -1,10 +1,10 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const usersController = require("../controllers/usersController");
+const usersController = require('../controllers/usersController');
 
 //prettier_ignore
 router
-    .route("/")
+    .route('/')
     .get(usersController.getAllUsers)
     .post(usersController.createNewUser)
     .patch(usersController.updateUser)
