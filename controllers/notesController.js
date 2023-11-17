@@ -83,7 +83,6 @@ const updateNote = asyncHandler(async (req, res) => {
     note.completed = completed;
 
     const updatedNote = await note.save();
-    5;
 
     res.json({ message: `${updatedNote.title} updated` });
 });
