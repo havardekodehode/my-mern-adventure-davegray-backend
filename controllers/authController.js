@@ -9,7 +9,7 @@ const asyncHandler = require('express-async-handler')
 const login = asyncHandler(async (req, res) => {
 	const { username, password } = req.body
 
-	console.log(password)
+	// console.log(password)
 
 	if (!username || !password) {
 		return res.status(400).json({ message: 'All fields are requiered' })
@@ -19,7 +19,7 @@ const login = asyncHandler(async (req, res) => {
 
 	if (!foundUser || !foundUser.active) {
 		//active is the boolean variable that can be changed by admin to deny access
-		return res.status(401)._construct.json({ message: 'Unauthorized' })
+		return res.status(401).json({ message: 'Unauthorized' })
 	}
 
 	const match = await bcrypt.compare(password, foundUser.password)
@@ -35,7 +35,7 @@ const login = asyncHandler(async (req, res) => {
             },
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '10s' }
+        { expiresIn: '1m' }
     );
 
 	//prettier-ignore
@@ -70,7 +70,10 @@ const refresh = asyncHandler(async (req, res) => {
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
         asyncHandler(async (err, decoded) => {
-            if (err) return res.status(403).json({ message: 'Forbidden' });
+            if (err) {
+				console.log(err) ;
+				return res.status(403).json({ message: 'Forbidden' })
+			}
             const foundUser = await User.findOne({
                 username: decoded.username,
             }).exec();
@@ -85,7 +88,7 @@ const refresh = asyncHandler(async (req, res) => {
                     },
                 },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '10s' }
+                { expiresIn: '1m' }
             );
 
             res.json({ accessToken });
